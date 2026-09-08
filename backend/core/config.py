@@ -16,6 +16,7 @@ class Settings(BaseSettings):
     CLERK_PUBLISHABLE_KEY: str = ""
     CLERK_SECRET_KEY: str = ""
     CLERK_JWKS_URL: str = ""
+    CLERK_ISSUER: str = ""
     EXPO_ACCESS_TOKEN: str = ""
 
     @field_validator("ALLOWED_ORIGINS", mode="before")
