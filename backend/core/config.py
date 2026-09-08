@@ -1,5 +1,5 @@
-from typing import List
-from pydantic_settings import BaseSettings
+from typing import List, Annotated
+from pydantic_settings import BaseSettings, NoDecode
 from pydantic import field_validator
 
 
@@ -7,7 +7,7 @@ class Settings(BaseSettings):
     API_PREFIX: str = "/api/v1"
     DEBUG: bool = False
 
-    ALLOWED_ORIGINS: str = ""
+    ALLOWED_ORIGINS: Annotated[List[str], NoDecode] = []
 
     DATABASE_URL: str = ""
     SUPABASE_URL: str = ""
@@ -18,10 +18,12 @@ class Settings(BaseSettings):
     CLERK_JWKS_URL: str = ""
     EXPO_ACCESS_TOKEN: str = ""
 
-    @field_validator("ALLOWED_ORIGINS")
-    def parsed_allowed_origins(cls, v: str) -> List[str]:
-        # because the env does not read [var1,var2] as array
-        return v.split(",") if v else []
+    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @classmethod
+    def _split_origins(cls, v: str | list[str]) -> list[str]:
+        if isinstance(v, str):
+            return [o.strip() for o in v.split(",") if o.strip()]
+        return v
 
     class Config:
         env_file = ".env"

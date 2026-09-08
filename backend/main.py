@@ -4,7 +4,7 @@ from routers import auth, events, invites, itinerary, polls
 from core.config import settings
 from database.database import get_session, engine
 from sqlalchemy import text
-from sqlmodel import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # FastAPI app
 app = FastAPI(
@@ -18,8 +18,8 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
