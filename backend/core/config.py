@@ -21,6 +21,14 @@ class Settings(BaseSettings):
     @field_validator("ALLOWED_ORIGINS", mode="before")
     @classmethod
     def _split_origins(cls, v: str | list[str]) -> list[str]:
+        """Normalize allowed origins into a list of trimmed, non-empty values.
+        
+        Parameters:
+            v (str | list[str]): Comma-separated origins or an existing list of origins.
+        
+        Returns:
+            list[str]: The normalized origin values.
+        """
         if isinstance(v, str):
             return [o.strip() for o in v.split(",") if o.strip()]
         return v
