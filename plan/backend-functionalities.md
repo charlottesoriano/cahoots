@@ -12,8 +12,8 @@ A build-order checklist. Each phase is meant to be completable and testable befo
 - [x] Set up Alembic migrations
 - [x] Add health check endpoint (`GET /health`) note: for improvement
 
-- [ ] Set up CORS middleware for the React Native app
-- [ ] Dockerize the app (`Dockerfile`, `docker-compose.yml` for local Postgres)
+- [x] Set up CORS middleware for the React Native app
+- [x] Dockerize the app (`Dockerfile`, `docker-compose.yml` for local Postgres)
 
 
 
