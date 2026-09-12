@@ -132,7 +132,6 @@ From the Clerk Dashboard (instance `destined-rooster-4555`):
   - verify: `uv run python -c "import jwt; from jwt import PyJWKClient; print('ok')"`
 
 - [x] **3. Create** `backend/core/security.py`
-
   **Why this file exists.** Every protected route needs the same question
   answered — "is this request carrying a valid Clerk token, and if so who is it?"
   That logic (fetch Clerk's keys, check the signature, check `iss`/`exp`/`nbf`,
@@ -142,12 +141,11 @@ From the Clerk Dashboard (instance `destined-rooster-4555`):
   `core/security.py` means:
   - one place to get the crypto right, one place to fix it if Clerk changes
   - routes stay thin — they just write `Depends(get_current_claims)` and receive
-    a verified `claims` dict, no JWT code in the handler
+  a verified `claims` dict, no JWT code in the handler
   - `verify_token` is a plain function with no FastAPI imports, so it's unit-
-    testable on its own and reusable from non-HTTP code
+  testable on its own and reusable from non-HTTP code
   - `core/` is already where cross-cutting infrastructure lives (`config.py`),
-    so auth belongs next to it, not inside any one router
-
+  so auth belongs next to it, not inside any one router
   The file has **four things, in this order**: two module-level variables, then
   two functions. Nothing below is nested inside anything above it unless the
   indentation says so.
@@ -203,23 +201,23 @@ From the Clerk Dashboard (instance `destined-rooster-4555`):
   - **What it returns**: the claims dict from `verify_token`. FastAPI passes that
   dict into the route as whatever argument declared `Depends(get_current_claims)`.
 
-- [ ] **4. Add a temporary probe endpoint**
+- [x] **4. Add a temporary probe endpoint**
   - `routers/auth.py` → `GET /auth/whoami` with `claims: dict = Depends(get_current_claims)`, returns `claims`
   - throwaway — item 2 replaces it with the real `GET /me`
 
-- [ ] **5. Test**
-  - [ ] no token → `curl http://localhost:8000/api/v1/auth/whoami` → `401`
-  - [ ] bad token → `-H "Authorization: Bearer garbage"` → `401`
-  - [ ] valid token → real token from frontend `getToken()`, or Clerk Dashboard →
+- [x] **5. Test**
+  - [x] no token → `curl http://localhost:8000/api/v1/auth/whoami` → `401`
+  - [x] bad token → `-H "Authorization: Bearer garbage"` → `401`
+  - [x] valid token → real token from frontend `getToken()`, or Clerk Dashboard →
     ```
     Sessions, or a JWT template's testing tab → `200` with `sub`, `iss`, `exp`
     ```
-  - [ ] expired token → wait out a short-lived token (~60s) → `401`
-  - [ ] `/` and `/docs` still work with no token (dependency wasn't globalized)
+  - [x] expired token → wait out a short-lived token (~60s) → `401`
+  - [x] `/` and `/docs` still work with no token (dependency wasn't globalized)
 
-- [ ] **6. Close out**
-  - [ ] tick item 1 in `README.md` and `../backend-functionalities.md`
-  - [ ] note deferred: `azp`/`aud` verification, route-wide enforcement (item 4)
+- [x] **6. Close out**
+  - [x] tick item 1 in `README.md` and `../backend-functionalities.md`
+  - [x] note deferred: `azp`/`aud` verification, route-wide enforcement (item 4)
 
 ---
 
