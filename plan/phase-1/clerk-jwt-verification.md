@@ -131,7 +131,23 @@ From the Clerk Dashboard (instance `destined-rooster-4555`):
   - `uv sync`
   - verify: `uv run python -c "import jwt; from jwt import PyJWKClient; print('ok')"`
 
-- [ ] **3. Create** `backend/core/security.py`
+- [x] **3. Create** `backend/core/security.py`
+
+  **Why this file exists.** Every protected route needs the same question
+  answered — "is this request carrying a valid Clerk token, and if so who is it?"
+  That logic (fetch Clerk's keys, check the signature, check `iss`/`exp`/`nbf`,
+  pull the claims) is identical for `/me`, every event route, every itinerary
+  route, and it's also needed outside routes (the item-3 webhook verifies Svix
+  signatures, and any background job that touches user data). Writing it once in
+  `core/security.py` means:
+  - one place to get the crypto right, one place to fix it if Clerk changes
+  - routes stay thin — they just write `Depends(get_current_claims)` and receive
+    a verified `claims` dict, no JWT code in the handler
+  - `verify_token` is a plain function with no FastAPI imports, so it's unit-
+    testable on its own and reusable from non-HTTP code
+  - `core/` is already where cross-cutting infrastructure lives (`config.py`),
+    so auth belongs next to it, not inside any one router
+
   The file has **four things, in this order**: two module-level variables, then
   two functions. Nothing below is nested inside anything above it unless the
   indentation says so.
