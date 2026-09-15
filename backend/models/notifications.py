@@ -19,7 +19,7 @@ class NotificationLog(SQLModel, table=True):
     id: uuid.UUID = Field(default_factory=uuid.uuid4, primary_key=True)
 
     # uuid, FK → users.id — the recipient
-    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
 
     # uuid, FK → events.id, nullable — not every notification is event-scoped
     event_id: uuid.UUID | None = Field(

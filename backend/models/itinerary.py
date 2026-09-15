@@ -47,7 +47,7 @@ class ItineraryItem(SQLModel, table=True):
     )
 
     # uuid, FK → users.id
-    created_by: uuid.UUID = Field(foreign_key="users.id", index=True)
+    created_by: str = Field(foreign_key="users.id", index=True)
 
     # timestamptz, default now()
     created_at: datetime = Field(
@@ -76,7 +76,7 @@ class ItineraryComment(SQLModel, table=True):
     )
 
     # uuid, FK → users.id
-    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
 
     # text (not null)
     content: str

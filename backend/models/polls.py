@@ -32,7 +32,7 @@ class Poll(SQLModel, table=True):
     status: PollStatus = Field(default=PollStatus.open)
 
     # uuid, FK → users.id
-    created_by: uuid.UUID = Field(foreign_key="users.id", index=True)
+    created_by: str = Field(foreign_key="users.id", index=True)
 
     # timestamptz, nullable
     closes_at: datetime | None = Field(
@@ -88,7 +88,7 @@ class PollVote(SQLModel, table=True):
     )
 
     # uuid, FK → users.id
-    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
 
     # timestamptz, default now()
     created_at: datetime = Field(
