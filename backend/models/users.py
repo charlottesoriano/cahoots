@@ -1,4 +1,3 @@
-import uuid
 from datetime import datetime
 from typing import TYPE_CHECKING
 
@@ -21,7 +20,7 @@ class User(SQLModel, table=True):
     # uuid, PK — "matches Clerk/Supabase Auth user id"
     # No default_factory: the id comes FROM Clerk/Supabase Auth, you pass it in
     # when you create the row (in the signup sync webhook, Phase 1).
-    id: uuid.UUID = Field(primary_key=True)
+    id: str = Field(primary_key=True)
 
     # text, unique
     email: str = Field(unique=True, index=True)

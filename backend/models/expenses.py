@@ -27,7 +27,7 @@ class Expense(SQLModel, table=True):
     event_id: uuid.UUID = Field(foreign_key="events.id", index=True, ondelete="CASCADE")
 
     # uuid, FK → users.id — who fronted the money
-    paid_by: uuid.UUID = Field(foreign_key="users.id", index=True)
+    paid_by: str = Field(foreign_key="users.id", index=True)
 
     # numeric(10,2)
     amount: Decimal = Field(sa_column=Column(Numeric(10, 2), nullable=False))
@@ -66,7 +66,7 @@ class ExpenseShare(SQLModel, table=True):
     )
 
     # uuid, FK → users.id — who owes this share
-    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
 
     # numeric(10,2)
     amount_owed: Decimal = Field(sa_column=Column(Numeric(10, 2), nullable=False))

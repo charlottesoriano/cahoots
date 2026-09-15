@@ -25,7 +25,7 @@ class PackingItem(SQLModel, table=True):
     label: str
 
     # uuid, FK → users.id, nullable — null = shared item
-    assigned_to: uuid.UUID | None = Field(
+    assigned_to: str | None = Field(
         default=None, foreign_key="users.id", index=True
     )
 

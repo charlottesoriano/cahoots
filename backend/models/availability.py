@@ -21,7 +21,7 @@ class AvailabilitySlot(SQLModel, table=True):
     event_id: uuid.UUID = Field(foreign_key="events.id", index=True, ondelete="CASCADE")
 
     # uuid, FK → users.id
-    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
 
     # date
     date: date

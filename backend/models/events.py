@@ -46,7 +46,7 @@ class Event(SQLModel, table=True):
     cover_image_url: str | None = Field(default=None)
 
     # uuid, FK → users.id — the user who created the event
-    created_by: uuid.UUID = Field(foreign_key="users.id", index=True)
+    created_by: str = Field(foreign_key="users.id", index=True)
 
     # timestamptz, default now() — set by Postgres
     created_at: datetime = Field(
@@ -91,7 +91,7 @@ class EventMember(SQLModel, table=True):
     event_id: uuid.UUID = Field(foreign_key="events.id", index=True, ondelete="CASCADE")
 
     # uuid, FK → users.id
-    user_id: uuid.UUID = Field(foreign_key="users.id", index=True)
+    user_id: str = Field(foreign_key="users.id", index=True)
 
     # enum('organizer','guest')
     role: EventRole
@@ -119,7 +119,7 @@ class EventInvite(SQLModel, table=True):
     token: str = Field(unique=True, index=True)
 
     # uuid, FK → users.id — who generated the invite
-    created_by: uuid.UUID = Field(foreign_key="users.id", index=True)
+    created_by: str = Field(foreign_key="users.id", index=True)
 
     # timestamptz, nullable
     expires_at: datetime | None = Field(
