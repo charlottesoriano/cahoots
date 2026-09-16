@@ -1,0 +1,14 @@
+services:
+  api:
+    build: .
+    command: uv run --frozen uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    environment:
+      DEBUG: "true"
+      ALLOWED_ORIGINS: http://localhost:8081,http://localhost:19006
+    volumes:
+      - .:/app
+      - /app/.venv

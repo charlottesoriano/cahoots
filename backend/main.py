@@ -1,10 +1,10 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, events, invites, itinerary, polls
+from routers import auth, events, invites, itinerary, polls, webhooks
 from core.config import settings
 from database.database import get_session, engine
 from sqlalchemy import text
-from sqlmodel import select
+from sqlalchemy.ext.asyncio import AsyncSession
 
 # FastAPI app
 app = FastAPI(
@@ -18,8 +18,8 @@ app = FastAPI(
 # CORS middleware
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=settings.ALLOWED_ORIGINS,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -30,6 +30,7 @@ app.include_router(events.router, prefix=settings.API_PREFIX)
 app.include_router(invites.router, prefix=settings.API_PREFIX)
 app.include_router(itinerary.router, prefix=settings.API_PREFIX)
 app.include_router(polls.router, prefix=settings.API_PREFIX)
+app.include_router(webhooks.router, prefix=settings.API_PREFIX)
 
 # Health check endpoint
 @app.get("/")
