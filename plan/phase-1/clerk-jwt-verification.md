@@ -106,13 +106,13 @@ not per request, so keys are cached and Clerk isn't hit on every call.
 
 ## Clerk config values
 
-From the Clerk Dashboard (instance `destined-rooster-4555`):
+From the Clerk Dashboard (instance `<your-instance>`):
 
 
 | Value    | Where                                                                                                            |
 | -------- | ---------------------------------------------------------------------------------------------------------------- |
-| JWKS URL | `https://destined-rooster-4555.clerk.accounts.dev/.well-known/jwks.json` (already in `.env` as `CLERK_JWKS_URL`) |
-| Issuer   | `https://destined-rooster-4555.clerk.accounts.dev` (same origin, no path) — **needs adding** as `CLERK_ISSUER`   |
+| JWKS URL | `https://<your-instance>.clerk.accounts.dev/.well-known/jwks.json` (already in `.env` as `CLERK_JWKS_URL`) |
+| Issuer   | `https://<your-instance>.clerk.accounts.dev` (same origin, no path) — **needs adding** as `CLERK_ISSUER`   |
 
 
 ---

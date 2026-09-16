@@ -1,7 +1,10 @@
 from fastapi import Depends, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials 
+from models.users import User
 from core.config import settings
 import jwt
+from sqlmodel.ext.asyncio.session import AsyncSession
+from database.database import get_session
 
 # downloads clerk's public signing keys (jwks) and caches them.
 jwks_client = jwt.PyJWKClient(settings.CLERK_JWKS_URL) 
@@ -32,3 +35,9 @@ def get_current_claims(creds: HTTPAuthorizationCredentials | None = Depends(bear
     # return the claims dict from verify_token().
     # FastAPI passes that dict into the route as whatever argument declared `Depends(get_current_claims)`
     return verify_token(creds.credentials)
+
+async def get_current_user(claims: dict = Depends(get_current_claims), session: AsyncSession = Depends(get_session)) -> User:
+    user = await session.get(User, claims["sub"])
+    if not user:
+        raise HTTPException(401, "User not found", headers={"WWW-Authenticate": "Bearer"})
+    return user
