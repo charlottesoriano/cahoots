@@ -6,7 +6,7 @@ Goal: an authenticated CRUD API — every route below Phase 1 sits behind an aut
 
 - [x] Integrate Clerk (or Supabase Auth) JWT verification middleware
 - [x] `GET /me` — return current authenticated user's profile
-- [ ] Sync webhook: when a user signs up via Clerk, create a corresponding `users` row in Postgres
+- [x] Sync webhook: when a user signs up via Clerk, create a corresponding `users` row in Postgres
 - [ ] Protect all routes below with an auth dependency (`Depends(get_current_user)`)
 
 ## Notes
