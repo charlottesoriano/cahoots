@@ -6,8 +6,9 @@ from pydantic import field_validator
 class Settings(BaseSettings):
     API_PREFIX: str = "/api/v1"
     DEBUG: bool = False
+    ENVIRONMENT: str = "development"
 
-    ALLOWED_ORIGINS: Annotated[List[str], NoDecode] = []
+    CORS_ORIGINS: Annotated[List[str], NoDecode] = []
 
     DATABASE_URL: str = ""
     SUPABASE_URL: str = ""
@@ -19,8 +20,9 @@ class Settings(BaseSettings):
     CLERK_ISSUER: str = ""
     CLERK_WEBHOOK_SIGNING_SECRET: str = ""
     EXPO_ACCESS_TOKEN: str = ""
+    REDIS_URL: str = ""
 
-    @field_validator("ALLOWED_ORIGINS", mode="before")
+    @field_validator("CORS_ORIGINS", mode="before")
     @classmethod
     def _split_origins(cls, v: str | list[str]) -> list[str]:
         if isinstance(v, str):
