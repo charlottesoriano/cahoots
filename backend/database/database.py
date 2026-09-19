@@ -1,5 +1,6 @@
 from sqlmodel import SQLModel, create_engine, Session
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlmodel.ext.asyncio.session import AsyncSession
 from core.config import settings
 
 # Supabase gives you a postgresql:// URL — SQLAlchemy's async driver needs
