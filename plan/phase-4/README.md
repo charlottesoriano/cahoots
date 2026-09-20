@@ -1,16 +1,14 @@
-# Phase 4 — Itinerary
+# Phase 4 — Invites
 
-Goal: the first "real" feature — day-by-day itinerary items, ordered.
+Goal: token-based invite links that let a user join an event as a guest. Unlocks multi-user testing.
 
 ## Checklist
 
-- [ ] `POST /events/{event_id}/itinerary` — add itinerary item
-- [ ] `GET /events/{event_id}/itinerary` — list items (ordered by `day_index`, then `sort_order`)
-- [ ] `PATCH /itinerary/{item_id}` — edit item
-- [ ] `PATCH /events/{event_id}/itinerary/reorder` — bulk reorder (accepts ordered list of IDs)
-- [ ] `DELETE /itinerary/{item_id}`
+- [ ] `POST /events/{event_id}/invite` — generate invite token/link
+- [ ] `POST /invites/{token}/accept` — join event as guest (auto-creates `event_members` row)
+- [ ] Handle "already a member" and "invalid/expired token" edge cases
 
 ## Tables involved
 
-`itinerary_items` (`day_index`, `sort_order`, optional `latitude`/`longitude` for map view),
-`itinerary_comments` (optional). See [`../phase-0/database-schema.md`](../phase-0/database-schema.md).
+`event_invites` (has `token` unique, nullable `expires_at`), `event_members`.
+See `[../phase-0/database-schema.md](../phase-0/database-schema.md)`.

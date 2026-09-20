@@ -41,13 +41,19 @@ class User(SQLModel, table=True):
 
     # --- connections ---
     # Events the user created (events.created_by)
-    events_created: list["Event"] = Relationship(back_populates="creator")
+    events_created: list["Event"] = Relationship(
+        back_populates="creator",
+        sa_relationship_kwargs={"foreign_keys": "[Event.created_by]"},
+    )
     # Rows joining the user to events they belong to (event_members.user_id)
     event_memberships: list["EventMember"] = Relationship(back_populates="user")
     # Invite links the user generated (event_invites.created_by)
     event_invites_created: list["EventInvite"] = Relationship(back_populates="creator")
     # Itinerary items the user added (itinerary_items.created_by)
-    itinerary_items_created: list["ItineraryItem"] = Relationship(back_populates="creator")
+    itinerary_items_created: list["ItineraryItem"] = Relationship(
+        back_populates="creator",
+        sa_relationship_kwargs={"foreign_keys": "[ItineraryItem.created_by]"},
+    )
     # Comments the user left on itinerary items (itinerary_comments.user_id)
     itinerary_comments: list["ItineraryComment"] = Relationship(back_populates="user")
     # Expenses the user fronted (expenses.paid_by)

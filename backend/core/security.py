@@ -12,6 +12,7 @@ jwks_client = jwt.PyJWKClient(settings.CLERK_JWKS_URL)
 # routes may send an Authorization: Bearer <token> header.
 # auto_error=False: if the header is missing, FastAPI passes None to us rather than raising its own 403 — so we can return our own 401 with our own message
 bearer_scheme = HTTPBearer(auto_error=False) 
+# HTTPBearer reads the Authorization header and returns the token if it exists
 
 def verify_token(token: str) -> dict:
     try:
