@@ -54,6 +54,14 @@ class ItineraryItem(SQLModel, table=True):
         sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
 
+    # last updated at
+    last_updated_at: datetime = Field(
+        sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    )
+
+    # last updated by
+    last_updated_by: str = Field(foreign_key="users.id", index=True)
+
     # --- connections ---
     event: "Event" = Relationship(back_populates="itinerary_items")
     creator: "User" = Relationship(back_populates="itinerary_items_created")
