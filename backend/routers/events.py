@@ -21,8 +21,7 @@ async def create_event(
     user: User = Depends(get_current_user), # before the route function is called, call get_current_user and whatever it returns is passed to the route function as the user argument
     session: AsyncSession = Depends(get_session), # before the route function is called, call get_session and whatever it returns is passed to the route function as the session argument
 ):
-    # ** -> dictionary u
-    # npacking. SomeClass(**some_dict) -> expands into keyword arguments as if you'd written each key-value pair out by hand:
+    # ** -> dictionary unpacking. SomeClass(**some_dict) -> expands into keyword arguments as if you'd written each key-value pair out by hand:
     # Event(title="Beach trip", description=None, location=None, start_date=None, end_date=None, cover_image_url=None)
     # The model_dump() method converts the EventCreate object into a dictionary, which is then unpacked into the Event constructor.
     # payload.model_dump() -> {'title': 'Beach trip', 'description': None, 'location': None, 'start_date': None, 'end_date': None, 'cover_image_url': None}
@@ -105,6 +104,7 @@ async def delete_event(
     event = await session.get(Event, event_id)
     if event is None:
         raise HTTPException(status_code=404, detail="Event not found")
+    result = EventRead.model_validate(event)
     await session.delete(event)
     await session.commit()
-    return event
+    return result
