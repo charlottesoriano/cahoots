@@ -53,16 +53,19 @@ class Event(SQLModel, table=True):
         sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
 
-    # last updated at
+    # timestamptz, default now()
     last_updated_at: datetime = Field(
         sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
 
-    # last updated by
-    last_updated_by: str = Field(foreign_key="users.id", index=True)
+    # last updated by, nullable
+    last_updated_by: str | None = Field(default=None, foreign_key="users.id", index=True)
 
     # --- connections ---
-    creator: "User" = Relationship(back_populates="events_created")
+    creator: "User" = Relationship(
+        back_populates="events_created",
+        sa_relationship_kwargs={"foreign_keys": "[Event.created_by]"},
+    )
     members: list["EventMember"] = Relationship(
         back_populates="event", cascade_delete=True
     )

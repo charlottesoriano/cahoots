@@ -54,17 +54,20 @@ class ItineraryItem(SQLModel, table=True):
         sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
 
-    # last updated at
+    # timestamptz, default now()
     last_updated_at: datetime = Field(
         sa_column=Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
     )
 
-    # last updated by
-    last_updated_by: str = Field(foreign_key="users.id", index=True)
+    # last updated by, nullable
+    last_updated_by: str | None = Field(default=None, foreign_key="users.id", index=True)
 
     # --- connections ---
     event: "Event" = Relationship(back_populates="itinerary_items")
-    creator: "User" = Relationship(back_populates="itinerary_items_created")
+    creator: "User" = Relationship(
+        back_populates="itinerary_items_created",
+        sa_relationship_kwargs={"foreign_keys": "[ItineraryItem.created_by]"},
+    )
     comments: list["ItineraryComment"] = Relationship(
         back_populates="item", cascade_delete=True
     )

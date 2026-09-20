@@ -43,3 +43,8 @@ class ItineraryRead(BaseModel):
 
     class Config:
         from_attributes = True
+
+class ItineraryUpdateOrder(BaseModel):
+    itinerary_id: uuid.UUID
+    sort_order: int
+
