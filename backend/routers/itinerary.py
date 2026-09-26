@@ -9,6 +9,7 @@ from models import EventMember, ItineraryItem
 from schemas.itineraries import ItineraryCreate, ItineraryRead, ItineraryUpdate, ItineraryUpdateOrder
 from core.security import get_current_user
 from fastapi import Depends
+import uuid
 
 router = APIRouter(
     prefix="/itinerary",
@@ -19,7 +20,7 @@ router = APIRouter(
 # get itineraries for the event (for organizer or guest)
 @router.get("/{event_id}", response_model=list[ItineraryRead])
 async def get_itineraries_for_event(
-    event_id: str,
+    event_id: uuid.UUID,
     member: EventMember = Depends(get_event_member),
     session: AsyncSession = Depends(get_session),
 ):
@@ -34,7 +35,7 @@ async def get_itineraries_for_event(
 # create
 @router.post("/{event_id}/create", response_model=ItineraryRead)
 async def create_itinerary(
-    event_id: str,
+    event_id: uuid.UUID,
     payload: ItineraryCreate,
     member: EventMember = Depends(get_event_member),
     session: AsyncSession = Depends(get_session),
@@ -57,7 +58,7 @@ async def create_itinerary(
 # accepts ordered list of IDs
 @router.patch("/{event_id}/reorder", response_model=list[ItineraryRead])
 async def bulk_reorder_itineraries(
-    event_id: str,
+    event_id: uuid.UUID,
     payload: list[ItineraryUpdateOrder],
     member: EventMember = Depends(get_event_member),
     session: AsyncSession = Depends(get_session),
@@ -72,7 +73,7 @@ async def bulk_reorder_itineraries(
     # payload can't leave some items reordered and others untouched
     for item in payload:
         itinerary = itineraries_by_id.get(item.itinerary_id)
-        if itinerary is None or str(itinerary.event_id) != event_id:
+        if itinerary is None or itinerary.event_id != event_id:
             raise HTTPException(status_code=404, detail="Itinerary not found")
 
     for item in payload:
@@ -89,14 +90,14 @@ async def bulk_reorder_itineraries(
 # update (can be updated by organizer or guest)
 @router.patch("/{event_id}/{itinerary_id}", response_model=ItineraryRead)
 async def update_itinerary(
-    event_id: str,
-    itinerary_id: str,
+    event_id: uuid.UUID,
+    itinerary_id: uuid.UUID,
     payload: ItineraryUpdate,
     member: EventMember = Depends(get_event_member),
     session: AsyncSession = Depends(get_session),
 ):
     itinerary = await session.get(ItineraryItem, itinerary_id)
-    if itinerary is None or str(itinerary.event_id) != event_id:
+    if itinerary is None or itinerary.event_id != event_id:
         raise HTTPException(status_code=404, detail="Itinerary not found")
     for field, value in payload.model_dump(exclude_unset=True).items():
         setattr(itinerary, field, value)
@@ -111,13 +112,13 @@ async def update_itinerary(
 # delete (can be deleted by organizer)
 @router.delete("/{event_id}/{itinerary_id}", response_model=ItineraryRead)
 async def delete_itinerary(
-    event_id: str,
-    itinerary_id: str,
+    event_id: uuid.UUID,
+    itinerary_id: uuid.UUID,
     member: EventMember = Depends(require_organizer),
     session: AsyncSession = Depends(get_session),
 ):
     itinerary = await session.get(ItineraryItem, itinerary_id)
-    if itinerary is None or str(itinerary.event_id) != event_id:
+    if itinerary is None or itinerary.event_id != event_id:
         raise HTTPException(status_code=404, detail="Itinerary not found")
     result = ItineraryRead.model_validate(itinerary)
     await session.delete(itinerary)

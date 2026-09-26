@@ -4,9 +4,9 @@ Goal: token-based invite links that let a user join an event as a guest. Unlocks
 
 ## Checklist
 
-- [ ] `POST /events/{event_id}/invite` — generate invite token/link
-- [ ] `POST /invites/{token}/accept` — join event as guest (auto-creates `event_members` row)
-- [ ] Handle "already a member" and "invalid/expired token" edge cases
+- [x] `POST /invites/{event_id}` — generate invite token/link
+- [x] `POST /invites/{token}/accept` — join event as guest (auto-creates `event_members` row)
+- [x] Handle "already a member" and "invalid/expired token" edge cases
 
 ## Tables involved
 

@@ -19,39 +19,39 @@ A build-order checklist. Each phase is meant to be completable and testable befo
 
 ## Phase 1 — Auth
 
-- [ ] Integrate Clerk (or Supabase Auth) JWT verification middleware
-- [ ] `GET /me` — return current authenticated user's profile
-- [ ] Sync webhook: when a user signs up via Clerk, create a corresponding `users` row in Postgres
-- [ ] Protect all routes below with auth dependency (`Depends(get_current_user)`)
+- [x] Integrate Clerk (or Supabase Auth) JWT verification middleware
+- [x] `GET /me` — return current authenticated user's profile
+- [x] Sync webhook: when a user signs up via Clerk, create a corresponding `users` row in Postgres
+- [x] Protect all routes below with auth dependency (`Depends(get_current_user)`)
 
 
 
 ## Phase 2 — Users & Events (core CRUD)
 
-- [ ] `POST /events` — create event (title, dates, location, cover image)
-- [ ] `GET /events` — list events the current user belongs to
-- [ ] `GET /events/{event_id}` — event detail
-- [ ] `PATCH /events/{event_id}` — edit event (organizer only)
-- [ ] `DELETE /events/{event_id}` — delete event (organizer only)
-- [ ] `event_members` table + role enforcement (organizer/guest) via dependency/decorator
+- [x] `POST /events` — create event (title, dates, location, cover image)
+- [x] `GET /events` — list events the current user belongs to
+- [x] `GET /events/{event_id}` — event detail
+- [x] `PATCH /events/{event_id}` — edit event (organizer only)
+- [x] `DELETE /events/{event_id}` — delete event (organizer only)
+- [x] `event_members` table + role enforcement (organizer/guest) via dependency/decorator
 
 
 
-## Phase 3 — Invites
+## Phase 3 — Itinerary
+
+- [x] `POST /events/{event_id}/itinerary` — add itinerary item
+- [x] `GET /events/{event_id}/itinerary` — list items (ordered)
+- [x] `PATCH /itinerary/{item_id}` — edit item
+- [x] `PATCH /events/{event_id}/itinerary/reorder` — bulk reorder (accepts ordered list of IDs)
+- [x] `DELETE /itinerary/{item_id}`
+
+
+
+## Phase 4 — Invites
 
 - [ ] `POST /events/{event_id}/invite` — generate invite token/link
 - [ ] `POST /invites/{token}/accept` — join event as guest (auto-creates `event_members` row)
 - [ ] Handle "already a member" and "invalid/expired token" edge cases
-
-
-
-## Phase 4 — Itinerary
-
-- [ ] `POST /events/{event_id}/itinerary` — add itinerary item
-- [ ] `GET /events/{event_id}/itinerary` — list items (ordered)
-- [ ] `PATCH /itinerary/{item_id}` — edit item
-- [ ] `PATCH /events/{event_id}/itinerary/reorder` — bulk reorder (accepts ordered list of IDs)
-- [ ] `DELETE /itinerary/{item_id}`
 
 
 
