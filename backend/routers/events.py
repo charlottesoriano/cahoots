@@ -8,6 +8,7 @@ from models.events import Event, EventMember, EventRole
 from models.users import User
 from schemas.events import EventCreate, EventRead, EventUpdate
 from core.permissions import get_event_member, require_organizer
+import uuid
 
 router = APIRouter(
     prefix="/events",
@@ -60,7 +61,7 @@ async def get_events(
 # event details
 @router.get("/{event_id}", response_model=EventRead)
 async def get_event_details(
-    event_id: str,
+    event_id: uuid.UUID,
     member: EventMember = Depends(get_event_member),
     session: AsyncSession = Depends(get_session),
 ):
@@ -76,7 +77,7 @@ async def get_event_details(
 # update event
 @router.put("/{event_id}", response_model=EventRead)
 async def update_event(
-    event_id: str,
+    event_id: uuid.UUID,
     payload: EventUpdate,
     member: EventMember = Depends(require_organizer),
     session: AsyncSession = Depends(get_session),
@@ -97,7 +98,7 @@ async def update_event(
 # delete event
 @router.delete("/{event_id}", response_model=EventRead)
 async def delete_event(
-    event_id: str,
+    event_id: uuid.UUID,
     member: EventMember = Depends(require_organizer),
     session: AsyncSession = Depends(get_session),
 ):

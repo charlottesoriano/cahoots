@@ -64,7 +64,7 @@ Yes — FastAPI resolves all dependencies before the route body executes. `get_e
 
 This is what caused a real authorization bug, and it's an extension of §7 in the phase-2 lessons file ("how FastAPI decides where a parameter comes from").
 
-`get_event_member(event_id: str, ...)` has no `Depends(...)` default on `event_id`, so FastAPI looks for a `{event_id}` placeholder in the *route's* path to bind it to. Early draft of `create_itinerary` was `@router.post("/create", ...)` — no `{event_id}` in the path at all. FastAPI's fallback (rule 4 from §7): treat it as a **required query parameter** instead — `POST /itinerary/create?event_id=...`.
+`get_event_member(event_id: uuid.UUID, ...)` has no `Depends(...)` default on `event_id`, so FastAPI looks for a `{event_id}` placeholder in the *route's* path to bind it to. Early draft of `create_itinerary` was `@router.post("/create", ...)` — no `{event_id}` in the path at all. FastAPI's fallback (rule 4 from §7): treat it as a **required query parameter** instead — `POST /itinerary/create?event_id=...`.
 
 The bug: `ItineraryCreate` *also* had its own `event_id` field in the JSON body. Nothing checked that the query-string `event_id` (checked for membership) and the body's `event_id` (actually written to the new row) were the same value. A member of Event A could pass `?event_id=<event A>` to pass the membership check, while the body's `event_id` pointed at Event B — creating a row in an event they had no access to.
 

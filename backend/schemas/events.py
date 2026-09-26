@@ -3,7 +3,6 @@ from datetime import date, datetime
 
 from pydantic import BaseModel
 
-
 # Request body for POST /events. Only the fields a client should be able to
 # set — id/created_by/created_at are server-assigned.
 class EventCreate(BaseModel):

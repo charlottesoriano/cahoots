@@ -6,10 +6,10 @@ from core.security import get_current_user
 from database.database import get_session
 from models.events import EventMember, EventRole
 from models.users import User
-
+import uuid
 
 async def get_event_member(
-    event_id: str,
+    event_id: uuid.UUID,
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ) -> EventMember:
