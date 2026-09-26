@@ -132,7 +132,7 @@ This applies identically inside nested dependencies, not just route functions di
 ```python
 # core/permissions.py
 async def get_event_member(
-    event_id: str,                              # <- no Depends default
+    event_id: uuid.UUID,                              # <- no Depends default
     user: User = Depends(get_current_user),
     session: AsyncSession = Depends(get_session),
 ) -> EventMember: ...
@@ -144,7 +144,7 @@ async def require_organizer(
 # routers/events.py
 @router.delete("/{event_id}", response_model=EventRead)
 async def delete_event(
-    event_id: str,
+    event_id: uuid.UUID,
     member: EventMember = Depends(require_organizer),
     session: AsyncSession = Depends(get_session),
 ): ...
@@ -160,7 +160,7 @@ async def delete_event(
 
 ```python
 async def get_event_details(
-    event_id: str,
+    event_id: uuid.UUID,
     member: EventMember = Depends(get_event_member),   # never referenced below
     session: AsyncSession = Depends(get_session),
 ):
