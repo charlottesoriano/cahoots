@@ -1,6 +1,6 @@
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
-from routers import auth, events, invites, itinerary, polls, webhooks
+from routers import auth, events, invites, itinerary, polls, webhooks, websockets
 from core.config import settings
 from database.database import get_session, engine
 from sqlalchemy import text
@@ -31,6 +31,7 @@ app.include_router(invites.router, prefix=settings.API_PREFIX)
 app.include_router(itinerary.router, prefix=settings.API_PREFIX)
 app.include_router(polls.router, prefix=settings.API_PREFIX)
 app.include_router(webhooks.router, prefix=settings.API_PREFIX)
+app.include_router(websockets.router, prefix=settings.API_PREFIX)
 
 # Health check endpoint
 @app.get("/")
